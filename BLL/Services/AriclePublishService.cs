@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,23 @@ namespace BLL
 
 //- сервіс, який опубліковує статтю
 // LifeTime(Transient, Scoped, Singleton)  краще використати для того чи іншого сервісу
-    internal class AriclePublishService
+    internal class AriclePublishService : IArticlePublishService
     {
+        private readonly IArticleService articleService;
 
+        public AriclePublishService(IArticleService _articleService)
+        {
+            articleService = _articleService;
+        }
+
+        //"publishes" to list of articles
+        public IEnumerable<Type> PublishArticle(Type articleType)
+        {
+            articleService.SaveArticleInfo(articleType);
+
+            IEnumerable<Type> articles = new List<Type>();
+            articles.ToList().Add(articleType);
+            return articles;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class Info
+    internal class Info:IInfo
     {
         private uint numOfSigns;
         private string text;

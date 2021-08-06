@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    internal class CheckArticleService
+    internal class CheckArticleService: ICheckArticleService
     {
-        private Article article;
-        public CheckArticleService(Article _article)
+        private IArticle article;
+        public CheckArticleService(IArticle _article)
         {
             article = _article;
         }

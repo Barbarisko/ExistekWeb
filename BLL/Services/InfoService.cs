@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interfaces;
+using System;
 
 namespace BLL
 {
@@ -9,14 +10,10 @@ namespace BLL
     //- сервіс, який вносить контент в статтю(наприклад з якогось файлу на диску)
 
     //Подумайте який LifeTime(Transient, Scoped, Singleton)  краще використати для того чи іншого сервісу
-    public interface IInfoService
+      internal class InfoService: IInfoService
     {
-        void AddInfo(string newText);
-    }
-    internal class InfoService: IInfoService
-    {
-        private Article article;
-        public InfoService(Article _article)
+        private IArticle article;
+        public InfoService(IArticle _article)
         {
             article = _article;
         }

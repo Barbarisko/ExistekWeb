@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Interfaces;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,72 +14,50 @@ namespace BLL
 //- сервіс, який зберігає інформацію про статтю, яку потрібно опублікувати
 
     //LifeTime - Scoped
-    public class ArticleService
+    internal class ArticleService: IArticleService
     {
         private IInfoService infoService;
+        Dictionary<string, string> details;
+
         public ArticleService(IInfoService _infoService)
         {
             infoService = _infoService;
         }
 
-        //посчитать кол-во файлов в папке Артиклс, каждую вычитать в модель, вернуть список моделей
-        //public IEnumerable<Article> GetAllArticles()
-        //{
-        //    return IEnumerable<Article> articles = _unitOfWork.ExhibitionRepository.GetAll();             
-        //}
-
-        
-        public void AddNewExhibition(string name, int? price, string description)
+        public string GetText(string articleName)
         {
-            Exhibition itemEntity = _unitOfWork.ExhibitionRepository.GetAll().ToList().Find(
-                        i => i.Name == name);
+            var path = $"{articleName}.txt";
 
-            if (itemEntity != null)
+            if (!File.Exists(path))
             {
-                throw new ArgumentException("This exhibition already exists! Find and edit it");
+                throw new FileNotFoundException($"no file with name {articleName}");
             }
-            else
-            {
-                ExhibitionModel newItem = new ExhibitionModel()
-                {
-                    Name = name,
-                    Price = price,
-                    Description = description
-                };
-
-                Exhibition newItemEntity = _mapper.Map<Exhibition>(newItem);
-                _unitOfWork.ExhibitionRepository.Add(newItemEntity);
-            }
-            _unitOfWork.Save();
+            var textForArticle = File.ReadAllText(path);
+            return textForArticle;
         }
 
-        public void DeleteExhibition(int exhId)
+        public void SaveArticleInfo(Type type)
         {
-            Exhibition exh = _unitOfWork.ExhibitionRepository.Get(exhId);
-            if (exh == null)
+            details = new Dictionary<string, string>();
+
+            var properties = type.GetProperties();
+
+            if (type == null)
             {
-                throw new KeyNotFoundException();
+                throw new ArgumentNullException("no article to save");
             }
-            _unitOfWork.ExhibitionRepository.Delete(exhId);
-            _unitOfWork.Save();
-        }
 
-        public void UpdateEXHById(int Id, string name, int price, string desc)
-        {
-            List<Exhibition> sortedItemEntities = _unitOfWork.ExhibitionRepository.GetAll()
-                .ToList().FindAll(i => i.Id == Id);
-            if (sortedItemEntities.Any())
+            foreach (var p in properties)
             {
-                foreach (Exhibition i in sortedItemEntities)
+                if((object)p.PropertyType is IInfo info)
                 {
-                    i.Name = name;
-                    i.Price = price;
-                    i.Description = desc;
-
-                    _unitOfWork.ExhibitionRepository.Update(i);
-                    _unitOfWork.Save();
+                    infoService.AddInfo(GetText(Convert.ToString(type.GetProperty("Name"))));
                 }
+                details.Add($"{p.PropertyType} {p.Name}", Convert.ToString(p.GetValue(p)));
+                Console.WriteLine($"{p.PropertyType} {p.Name}");
             }
+
+            Console.WriteLine("Detailes saved");
         }
     }
 }
