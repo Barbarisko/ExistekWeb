@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    internal class Article:IArticle
+    public class Article:IArticle
     {
         private int id;
         private string name;

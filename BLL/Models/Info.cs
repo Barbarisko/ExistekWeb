@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    internal class Info:IInfo
+    public class Info:IInfo
     {
         private uint numOfSigns;
         private string text;

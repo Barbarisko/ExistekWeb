@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    internal class CheckArticleService: ICheckArticleService
+    public class CheckArticleService: ICheckArticleService
     {
         private IArticle article;
         public CheckArticleService(IArticle _article)

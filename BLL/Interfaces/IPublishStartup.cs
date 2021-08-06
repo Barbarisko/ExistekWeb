@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Interfaces
 {
-    interface IPublishStartup
+    public interface IPublishStartup
     {
+        void Publish(string filepath);
+
     }
 }

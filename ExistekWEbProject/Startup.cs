@@ -1,3 +1,5 @@
+using BLL;
+using Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +28,14 @@ namespace ExistekWEbProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IInfo, Info>();
+            services.AddScoped<IArticle, Article>();
+
+            services.AddTransient<IArticleService, ArticleService>();
+            services.AddTransient<IArticlePublishService, AriclePublishService>();
+            services.AddTransient<ICheckArticleService, CheckArticleService>();
+            services.AddTransient<IInfoService, InfoService>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -10,7 +10,7 @@ namespace BLL
     //- сервіс, який вносить контент в статтю(наприклад з якогось файлу на диску)
 
     //Подумайте який LifeTime(Transient, Scoped, Singleton)  краще використати для того чи іншого сервісу
-      internal class InfoService: IInfoService
+      public class InfoService: IInfoService
     {
         private IArticle article;
         public InfoService(IArticle _article)

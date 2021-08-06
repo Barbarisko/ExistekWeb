@@ -14,10 +14,11 @@ namespace BLL
 //- сервіс, який зберігає інформацію про статтю, яку потрібно опублікувати
 
     //LifeTime - Scoped
-    internal class ArticleService: IArticleService
+    public class ArticleService: IArticleService
     {
         private IInfoService infoService;
         Dictionary<string, string> details;
+        public Article article;
 
         public ArticleService(IInfoService _infoService)
         {
@@ -36,6 +37,18 @@ namespace BLL
             return textForArticle;
         }
 
+        public Article CreateArticle(string name, string author, string text)
+        {
+            if (name == null || author == null)
+            {
+                throw new ArgumentNullException("no data to create");
+            }
+
+            article = new Article { Name = name, Author = author, Text = new Info { } };
+
+            return article;
+        }
+        
         public void SaveArticleInfo(Type type)
         {
             details = new Dictionary<string, string>();
