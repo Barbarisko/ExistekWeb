@@ -23,12 +23,12 @@ namespace ExistekWEbProject.Controllers
             this.publishStartup = publishStartup;
         }
 
-        [HttpGet]
-        public IActionResult Publish(string filename)
-        {
-            publishStartup.Publish(filename);
-            return Ok();
-        }
+        //[HttpGet]
+        //public IActionResult Publish(string filename)
+        //{
+        //    publishStartup.Publish(filename);
+        //    return Ok();
+        //}
 
 
     }
