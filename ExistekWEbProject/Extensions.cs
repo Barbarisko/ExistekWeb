@@ -23,9 +23,12 @@ namespace ExistekWEbProject
             services.AddTransient<IPublishStartup, PublishStartup>();
         }
 
-        public static IApplicationBuilder UsePublishMiddleware(this IApplicationBuilder app, string filename)
+        public static IApplicationBuilder UsePublishMiddleware(this IApplicationBuilder app, Action<PublishOptions> configureOptions)
         {
-            return app.UseMiddleware<PublishMiddleware>(filename);
+            var options = new PublishOptions();
+            configureOptions(options);
+
+            return app.UseMiddleware<PublishMiddleware>(options);
         }
     }
 }

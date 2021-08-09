@@ -10,13 +10,13 @@ namespace ExistekWEbProject
     public class PublishMiddleware
     {
         private readonly RequestDelegate requestDelegate;
-        private readonly string filename;
+        private readonly PublishOptions options;
 
 
-        public PublishMiddleware(RequestDelegate _requestDelegate, string _filename)
+        public PublishMiddleware(RequestDelegate _requestDelegate, PublishOptions options)
         {
             this.requestDelegate = _requestDelegate;
-            this.filename = _filename;
+            this.options = options;
         }
 
         public async Task InvokeAsync(HttpContext context, IPublishStartup _publishStartup)
@@ -40,7 +40,7 @@ namespace ExistekWEbProject
 
             var requiredFilename = context.Request.Headers["filename"];
 
-            if (requiredFilename == filename)
+            if (requiredFilename == options.filename)
             {
                 _publishStartup.Publish(requiredFilename);
 
