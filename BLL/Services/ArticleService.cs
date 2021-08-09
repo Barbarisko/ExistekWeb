@@ -31,6 +31,7 @@ namespace BLL
 
             if (!File.Exists(path))
             {
+                File.Create(path);
                 throw new FileNotFoundException($"no file with name {articleName}");
             }
             var textForArticle = File.ReadAllText(path);
@@ -44,7 +45,7 @@ namespace BLL
                 throw new ArgumentNullException("no data to create");
             }
 
-            article = new Article { Name = name, Author = author, Text = new Info { } };
+            article = new Article { Name = name, Author = author, Text = new Info { Text = text} };
 
             return article;
         }
@@ -62,7 +63,7 @@ namespace BLL
 
             foreach (var p in properties)
             {
-                if((object)p.PropertyType is IInfo info)
+                if((object)p.PropertyType is Info info)
                 {
                     infoService.AddInfo(GetText(Convert.ToString(type.GetProperty("Name"))));
                 }

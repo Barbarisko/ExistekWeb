@@ -20,7 +20,6 @@ namespace BLL
             if (article.Name == null)
             {
                 return false;
-                throw new ArgumentNullException("no name provided");
             }
             return true;
         }
@@ -30,7 +29,6 @@ namespace BLL
             if (article.Author == null)
             {
                 return false;
-                throw new ArgumentNullException("no author provided");
             }
             return true;
         }
@@ -39,7 +37,7 @@ namespace BLL
             if (article.Text.NumOfSigns == 0)
             {
                 return false;
-                throw new ArgumentNullException("empty article");
+                //throw new ArgumentNullException("empty article");
             }
             return true;
         }

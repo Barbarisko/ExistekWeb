@@ -28,11 +28,11 @@ namespace BLL
                 //тут я запуталась с кастами к типам, короче оно не работеат, и мозг уже тоже не работает
 
                 var articles = articlePublishService.PublishArticle(
-                    articleService.CreateArticle("article1", "author", articleService.GetText(filepath)));
+                    articleService.CreateArticle(filepath, "author", articleService.GetText(filepath)));
 
                 foreach (var a in articles)
                 {
-                    if (a is Article art)
+                    if ((object)a is Article art)
                     {
                         Console.WriteLine($"{art.Name} \n {art.Publishdate} \n {art.Author} \n {art.Text.Text}");
                         Checks();
@@ -47,8 +47,7 @@ namespace BLL
 
         private void Checks()
         {
-            checkArticleService.HasHeading();
-            checkArticleService.HasAuthor();
+            if(!checkArticleService.HasHeading() || !checkArticleService.HasAuthor()) throw new ArgumentNullException("no name provided");
             checkArticleService.IsOfSetVolume(66);
         }
     }

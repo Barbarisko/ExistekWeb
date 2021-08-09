@@ -28,14 +28,8 @@ namespace ExistekWEbProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IInfo, Info>();
-            services.AddScoped<IArticle, Article>();
-
-            services.AddTransient<IArticleService, ArticleService>();
-            services.AddTransient<IArticlePublishService, AriclePublishService>();
-            services.AddTransient<ICheckArticleService, CheckArticleService>();
-            services.AddTransient<IInfoService, InfoService>();
-
+            //the extension method used here
+            services.AddCustomServices();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -59,6 +53,8 @@ namespace ExistekWEbProject
             app.UseRouting();
 
             app.UseAuthorization();
+            //custom middleware used here
+            app.UsePublishMiddleware("article1");
 
             app.UseEndpoints(endpoints =>
             {

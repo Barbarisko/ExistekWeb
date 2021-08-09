@@ -13,20 +13,23 @@ namespace ExistekWEbProject.Controllers
     [Route("api/[controller]")]
     public class ArticleController : Controller
     {
-        private readonly IArticlePublishService articlePublishService;
-        private readonly ICheckArticleService checkArticleService;
-        private readonly IArticleService articleService;
+        private readonly IPublishStartup publishStartup;
 
         private readonly ILogger<ArticleController> logger;
 
-        public ArticleController(ILogger<ArticleController> _logger,
-            IArticlePublishService _articlePublishService, ICheckArticleService _checkArticleService)
+        public ArticleController(ILogger<ArticleController> _logger, IPublishStartup publishStartup)
         {
             logger = _logger;
-            articlePublishService = _articlePublishService;
-
+            this.publishStartup = publishStartup;
         }
 
-       
+        [HttpGet]
+        public IActionResult Publish(string filename)
+        {
+            publishStartup.Publish(filename);
+            return Ok();
+        }
+
+
     }
 }
