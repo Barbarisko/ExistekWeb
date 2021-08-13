@@ -34,12 +34,12 @@ namespace ExistekWEbProject
         {
             //the extension method used here
             services.AddCustomServices();
-            //var publishOptions = Configuration.GetSection("BasicFileConfig").Get<PublishOptions>();
+            var publishOptions = Configuration.GetSection("BasicFileConfig").Get<PublishOptions>();
 
-            //Console.WriteLine("Basic author: " + publishOptions.Author);
-            //Console.WriteLine("Basic filename: " + publishOptions.Filename);
-            //Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
-            //Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
+            Console.WriteLine("Basic author: " + publishOptions.Author);
+            Console.WriteLine("Basic filename: " + publishOptions.Filename);
+            Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
+            Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
 
             services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));
 
@@ -53,26 +53,8 @@ namespace ExistekWEbProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            //defining file for debug style logging
-            var loggingOptions = Configuration.GetSection("FileLog:BasicFileLog").Get<LoggingOptions>(); 
-            loggerFactory.AddFile(loggingOptions, new ColoredConsoleLoggerConfiguration
-            {
-                LogLevel = LogLevel.Debug,
-                Color = ConsoleColor.Blue
-            });
-            var defaultLogger = loggerFactory.CreateLogger("DefaultLogger");
-            defaultLogger.LogDebug("Processing request {0}", loggingOptions.FileName);
 
-            //defining file for error style logging
-            var errorlogpath = Configuration.GetSection("FileLog:ErrorFileLog").Get<LoggingOptions>();
-            loggerFactory.AddFile(errorlogpath, new ColoredConsoleLoggerConfiguration
-            {
-                LogLevel = LogLevel.Error,
-                Color = ConsoleColor.Red
-            });
-            var errorLogger = loggerFactory.CreateLogger("ErrorLogger");
-            errorLogger.LogError("Processing request {0}", errorlogpath.FileName);
-
+            SetLogging(loggerFactory);
             //app.ConfigureExceptionHandler(defaultLogger);
 
             if (env.IsDevelopment())
@@ -97,6 +79,29 @@ namespace ExistekWEbProject
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void SetLogging(ILoggerFactory loggerFactory)
+        {
+            //defining file for debug style logging
+            var loggingOptions = Configuration.GetSection("FileLog:BasicFileLog").Get<LoggingOptions>();
+            loggerFactory.AddFile(loggingOptions, new ColoredConsoleLoggerConfiguration
+            {
+                LogLevel = LogLevel.Debug,
+                Color = ConsoleColor.Blue
+            });
+            var defaultLogger = loggerFactory.CreateLogger("DefaultLogger");
+            defaultLogger.LogDebug("Processing request {0}", loggingOptions.FileName);
+
+            //defining file for error style logging
+            var errorlogpath = Configuration.GetSection("FileLog:ErrorFileLog").Get<LoggingOptions>();
+            loggerFactory.AddFile(errorlogpath, new ColoredConsoleLoggerConfiguration
+            {
+                LogLevel = LogLevel.Error,
+                Color = ConsoleColor.Red
+            });
+            var errorLogger = loggerFactory.CreateLogger("ErrorLogger");
+            errorLogger.LogError("Processing request {0}", errorlogpath.FileName);
         }
     }
 }

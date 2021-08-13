@@ -17,7 +17,6 @@ namespace ExistekWEbProject
         {
             services.AddScoped<IInfo, Info>();
             services.AddScoped<IArticle, Article>();
-            //services.AddScoped<ILogger, PublishLogger>();
 
             services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<IArticlePublishService, AriclePublishService>();

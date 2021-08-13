@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ExistekWEbProject.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("publish")]
     public class ArticleController : Controller
     {
         private readonly IPublishStartup publishStartup;

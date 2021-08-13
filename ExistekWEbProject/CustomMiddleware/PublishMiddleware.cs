@@ -23,18 +23,7 @@ namespace ExistekWEbProject
         }
 
         public async Task InvokeAsync(HttpContext context, IPublishStartup _publishStartup)
-        {
-            //var requiredFilename = context.Request.Query["filename"];
-            //if (!string.IsNullOrWhiteSpace(requiredFilename))
-            //{
-            //    _publishStartup.Publish(requiredFilename);
-
-            //    await context.Response.WriteAsync($"File  {requiredFilename} published");
-            //}
-
-            //await requestDelegate(context);
-
-
+        {            
             if (!context.Request.Headers.ContainsKey("filename"))
             {
                 await context.Response.WriteAsync("'filename' does not exist");
