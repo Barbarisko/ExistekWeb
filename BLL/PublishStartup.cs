@@ -41,6 +41,8 @@ namespace BLL
 
             }catch(Exception e)
             {
+                Console.WriteLine("no articles");
+
                 Console.WriteLine(e.Message);
             }
         }

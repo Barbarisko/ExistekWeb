@@ -18,7 +18,7 @@ namespace BLL
 
         public Info()
         {
-            numOfSigns = Convert.ToUInt32(Text.Trim().Count<char>());
+            Console.WriteLine($"num of signs in text = {numOfSigns }");
         }
 
     }

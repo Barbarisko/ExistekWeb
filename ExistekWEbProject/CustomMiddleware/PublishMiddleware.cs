@@ -1,5 +1,6 @@
 ﻿using Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,14 @@ namespace ExistekWEbProject
     {
         private readonly RequestDelegate requestDelegate;
         private readonly PublishOptions options;
+        //private readonly ILogger logger;
 
 
-        public PublishMiddleware(RequestDelegate _requestDelegate, PublishOptions options)
+        public PublishMiddleware(RequestDelegate _requestDelegate, PublishOptions options/*, ILogger logger*/)
         {
             this.requestDelegate = _requestDelegate;
             this.options = options;
+            //this.logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context, IPublishStartup _publishStartup)
@@ -42,9 +45,15 @@ namespace ExistekWEbProject
 
             if (requiredFilename == options.Filename)
             {
+                //logger.LogInformation($"Fetching article from {requiredFilename}.txt");
+
                 _publishStartup.Publish(requiredFilename);
 
-                await context.Response.WriteAsync($"File  {requiredFilename} published");
+                //throw new AccessViolationException($"Exception while fetching article from {requiredFilename}.txt.");
+
+                //logger.LogInformation($"Returning {requiredFilename}.");
+
+                await context.Response.WriteAsync($"File {requiredFilename} published");
                 await requestDelegate.Invoke(context);
             }
             else

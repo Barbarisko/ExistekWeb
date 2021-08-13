@@ -34,7 +34,7 @@ namespace ExistekWEbProject.CustomLogger
             {
                 return;
             }
-
+            
             var filePath = Path.Combine(_provider.Options.FolderPath, _provider.Options.FileName);
 
             var logLine = formatter(state, exception) + Environment.NewLine;

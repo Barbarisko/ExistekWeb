@@ -1,5 +1,6 @@
 using BLL;
 using ExistekWEbProject.CustomLogger;
+using ExistekWEbProject.Extensions;
 using Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,8 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Ninject.Activation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +41,7 @@ namespace ExistekWEbProject
             //Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
             //Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
 
-            //services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));           
+            services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -48,20 +51,27 @@ namespace ExistekWEbProject
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            var loggingOptions = Configuration.GetSection("FileLog").Get<LoggingOptions>();
+            var loggingOptions = Configuration.GetSection("FileLog:BasicFileLog").Get<LoggingOptions>();
+            var errorlogpath = Configuration.GetSection("FileLog:ErrorFileLog").Get<LoggingOptions>();
 
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder.AddProvider(new PublishLoggerProvider(loggingOptions));
-            });
+            //var loggerFactory = LoggerFactory.Create(builder =>
+            //{
+            //    builder.AddProvider(new PublishLoggerProvider(loggingOptions));
+            //});
+            //var logger1 = loggerFactory.CreateLogger("Custom Logger");
 
-            var logger1 = loggerFactory.CreateLogger("Custom Logger");
+            
+            loggerFactory.AddFile(loggingOptions);
+            var defaultLogger = loggerFactory.CreateLogger("DefaultLogger");
 
-            logger1.LogCritical("Information");
-            logger.LogError("Information 1");
-            logger.LogDebug("Information 2");
+
+            loggerFactory.AddFile(errorlogpath);
+            var errorLogger = loggerFactory.CreateLogger("ErrorLogger");
+            errorLogger.LogInformation("Processing request {0}", errorlogpath.FileName);
+
+            //app.ConfigureExceptionHandler(defaultLogger);
 
             if (env.IsDevelopment())
             {

@@ -18,6 +18,7 @@ namespace ExistekWEbProject.CustomLogger
             if (!Directory.Exists(Options.FolderPath))
             {
                 Directory.CreateDirectory(Options.FolderPath);
+                //File.Create(Options.FolderPath + newfile);
             }
         }
 

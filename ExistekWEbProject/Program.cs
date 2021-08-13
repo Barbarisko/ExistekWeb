@@ -24,11 +24,11 @@ namespace ExistekWEbProject
                     configureLogging.ClearProviders();
                     configureLogging.AddConsole();
 
-                    var loggingOptions = hostBuilderContext.Configuration.GetSection("FileLog").Get<LoggingOptions>();
-                    configureLogging.AddProvider(new PublishLoggerProvider(loggingOptions));
+                    //var loggingOptions = hostBuilderContext.Configuration.GetSection("FileLog").Get<LoggingOptions>();
+                    //configureLogging.AddProvider(new PublishLoggerProvider(loggingOptions, ));
 
-                    // configureLogging.SetMinimumLevel(LogLevel.Trace);
-                    // configureLogging.AddFilter("Microsoft", LogLevel.Warning);
+                    configureLogging.SetMinimumLevel(LogLevel.Trace);
+                    configureLogging.AddFilter("Microsoft", LogLevel.Warning);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

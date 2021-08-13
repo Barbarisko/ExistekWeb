@@ -26,8 +26,15 @@ namespace ExistekWEbProject.Controllers
         //[HttpGet]
         //public IActionResult Publish(string filename)
         //{
+        //    logger.LogInformation($"Fetching article from {filename}.txt");
+
         //    publishStartup.Publish(filename);
-        //    return Ok();
+
+        //    throw new AccessViolationException($"Exception while fetching article from {filename}.txt.");
+
+        //    logger.LogInformation($"Returning {filename}.");
+
+        //    return Ok(filename);
         //}
 
 
