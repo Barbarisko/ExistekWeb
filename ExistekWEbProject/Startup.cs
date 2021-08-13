@@ -1,4 +1,5 @@
 using BLL;
+using ExistekWEbProject.CustomLogger;
 using Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,14 +31,15 @@ namespace ExistekWEbProject
         {
             //the extension method used here
             services.AddCustomServices();
-            var publishOptions = Configuration.GetSection("BasicFileConfig").Get<PublishOptions>();
+            //var publishOptions = Configuration.GetSection("BasicFileConfig").Get<PublishOptions>();
 
-            Console.WriteLine("Basic author: " + publishOptions.Author);
-            Console.WriteLine("Basic filename: " + publishOptions.Filename);
-            Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
-            Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
+            //Console.WriteLine("Basic author: " + publishOptions.Author);
+            //Console.WriteLine("Basic filename: " + publishOptions.Filename);
+            //Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
+            //Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
 
-            services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));
+            //services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));           
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -46,8 +48,21 @@ namespace ExistekWEbProject
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            var loggingOptions = Configuration.GetSection("FileLog").Get<LoggingOptions>();
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddProvider(new PublishLoggerProvider(loggingOptions));
+            });
+
+            var logger1 = loggerFactory.CreateLogger("Custom Logger");
+
+            logger1.LogCritical("Information");
+            logger.LogError("Information 1");
+            logger.LogDebug("Information 2");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
