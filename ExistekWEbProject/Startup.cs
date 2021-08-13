@@ -30,7 +30,14 @@ namespace ExistekWEbProject
         {
             //the extension method used here
             services.AddCustomServices();
+            var publishOptions = Configuration.GetSection("BasicFileConfig").Get<PublishOptions>();
 
+            Console.WriteLine("Basic author: " + publishOptions.Author);
+            Console.WriteLine("Basic filename: " + publishOptions.Filename);
+            Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
+            Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
+
+            services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -56,7 +63,7 @@ namespace ExistekWEbProject
             //custom middleware used here
             app.UsePublishMiddleware(options =>
             {
-                options.filename = "article1";
+                options.Filename = "article1";
             });
 
             app.UseEndpoints(endpoints =>

@@ -40,7 +40,7 @@ namespace ExistekWEbProject
 
             var requiredFilename = context.Request.Headers["filename"];
 
-            if (requiredFilename == options.filename)
+            if (requiredFilename == options.Filename)
             {
                 _publishStartup.Publish(requiredFilename);
 

@@ -16,5 +16,10 @@ namespace BLL
                                  set { numOfSigns = Convert.ToUInt32(Text.Trim().Count<char>()); } }
         public string? Text { get => text; set => text = value; }
 
+        public Info()
+        {
+            numOfSigns = Convert.ToUInt32(Text.Trim().Count<char>());
+        }
+
     }
 }
