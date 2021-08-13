@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BLL;
+using System;
 using System.Collections.Generic;
 
 namespace Interfaces
 {
     public interface IArticlePublishService
     {
-        IEnumerable<Type> PublishArticle(object obj);
+        IEnumerable<Article> PublishArticle(Article obj);
     }
 }

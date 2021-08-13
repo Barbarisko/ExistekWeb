@@ -53,23 +53,25 @@ namespace ExistekWEbProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            var loggingOptions = Configuration.GetSection("FileLog:BasicFileLog").Get<LoggingOptions>();
-            var errorlogpath = Configuration.GetSection("FileLog:ErrorFileLog").Get<LoggingOptions>();
-
-            //var loggerFactory = LoggerFactory.Create(builder =>
-            //{
-            //    builder.AddProvider(new PublishLoggerProvider(loggingOptions));
-            //});
-            //var logger1 = loggerFactory.CreateLogger("Custom Logger");
-
-            
-            loggerFactory.AddFile(loggingOptions);
+            //defining file for debug style logging
+            var loggingOptions = Configuration.GetSection("FileLog:BasicFileLog").Get<LoggingOptions>(); 
+            loggerFactory.AddFile(loggingOptions, new ColoredConsoleLoggerConfiguration
+            {
+                LogLevel = LogLevel.Debug,
+                Color = ConsoleColor.Blue
+            });
             var defaultLogger = loggerFactory.CreateLogger("DefaultLogger");
+            defaultLogger.LogDebug("Processing request {0}", loggingOptions.FileName);
 
-
-            loggerFactory.AddFile(errorlogpath);
+            //defining file for error style logging
+            var errorlogpath = Configuration.GetSection("FileLog:ErrorFileLog").Get<LoggingOptions>();
+            loggerFactory.AddFile(errorlogpath, new ColoredConsoleLoggerConfiguration
+            {
+                LogLevel = LogLevel.Error,
+                Color = ConsoleColor.Red
+            });
             var errorLogger = loggerFactory.CreateLogger("ErrorLogger");
-            errorLogger.LogInformation("Processing request {0}", errorlogpath.FileName);
+            errorLogger.LogError("Processing request {0}", errorlogpath.FileName);
 
             //app.ConfigureExceptionHandler(defaultLogger);
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,26 +10,29 @@ namespace ExistekWEbProject.CustomLogger
 {
     public class PublishLoggerProvider : ILoggerProvider
     {
-        public readonly LoggingOptions Options;
-
-        public PublishLoggerProvider(LoggingOptions options)
+        public readonly LoggingOptions _options;
+        private readonly ColoredConsoleLoggerConfiguration _config;
+        private readonly ConcurrentDictionary<string, PublishLogger> _loggers = new ConcurrentDictionary<string, PublishLogger>();
+        public PublishLoggerProvider(LoggingOptions options, ColoredConsoleLoggerConfiguration config)
         {
-            Options = options;
+            _options = options;
 
-            if (!Directory.Exists(Options.FolderPath))
+            if (!Directory.Exists(_options.FolderPath))
             {
-                Directory.CreateDirectory(Options.FolderPath);
+                Directory.CreateDirectory(_options.FolderPath);
                 //File.Create(Options.FolderPath + newfile);
             }
+            _config = config;
         }
 
         public void Dispose()
         {
+            _loggers.Clear();
         }
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new PublishLogger(this);
+            return _loggers.GetOrAdd(categoryName, name => new PublishLogger(this, _config, name));
         }
     }
 }

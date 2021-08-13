@@ -30,7 +30,9 @@ namespace BLL
                 var articles = articlePublishService.PublishArticle(
                     articleService.CreateArticle(filepath, "author", articleService.GetText(filepath)));
 
-                foreach (var a in articles)
+                articles.ToList().Add(new Article());
+
+                foreach (var a in articles.ToList())
                 {
                     if ((object)a is Article art)
                     {

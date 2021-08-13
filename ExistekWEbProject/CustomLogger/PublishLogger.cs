@@ -13,9 +13,14 @@ namespace ExistekWEbProject.CustomLogger
 
         private static object _lock = new object();
 
-        public PublishLogger(PublishLoggerProvider provider)
+        private readonly ColoredConsoleLoggerConfiguration _config;
+        private readonly string _name;
+
+        public PublishLogger(PublishLoggerProvider provider, ColoredConsoleLoggerConfiguration config, string name)
         {
             _provider = provider;
+            _config = config;
+            _name = name;
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -25,7 +30,7 @@ namespace ExistekWEbProject.CustomLogger
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return logLevel != LogLevel.None;
+            return logLevel == _config.LogLevel;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
@@ -34,15 +39,22 @@ namespace ExistekWEbProject.CustomLogger
             {
                 return;
             }
-            
-            var filePath = Path.Combine(_provider.Options.FolderPath, _provider.Options.FileName);
-
-            var logLine = formatter(state, exception) + Environment.NewLine;
-
-            lock (_lock)
+            if (_config.EventId == 0 || _config.EventId == eventId.Id)
             {
-                File.AppendAllText(filePath, logLine);
-            }
+                var filePath = Path.Combine(_provider._options.FolderPath, _provider._options.FileName);
+
+                var logLine = formatter(state, exception) + Environment.NewLine;
+
+                lock (_lock)
+                {
+                    var color = Console.ForegroundColor;
+                    Console.ForegroundColor = _config.Color;
+                    Console.WriteLine($"{logLevel.ToString()} - {eventId.Id} - {_name} - {formatter(state, exception)}");
+                    Console.ForegroundColor = color;
+
+                    File.AppendAllText(filePath, logLine);
+                }                
+            }                
         }
     }
 }

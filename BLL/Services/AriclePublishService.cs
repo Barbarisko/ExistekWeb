@@ -25,12 +25,13 @@ namespace BLL
         
 
         //"publishes" to list of articles
-        public IEnumerable<Type> PublishArticle(object obj)
+        public IEnumerable<Article> PublishArticle(Article obj)
         {
             articleService.SaveArticleInfo(obj.GetType());
 
-            IEnumerable<Type> articles = new List<Type>();
-            articles.ToList().Add(obj.GetType());
+            IEnumerable<Article> articles = new List<Article>();
+            articles.ToList().Add(obj);
+            //articles.ToList().Add(obj.GetType());
             return articles;
         }
     }

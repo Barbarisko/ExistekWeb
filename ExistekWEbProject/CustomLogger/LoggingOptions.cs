@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,5 +10,5 @@ namespace ExistekWEbProject.CustomLogger
     {
         public string FileName { get; set; }
         public string FolderPath { get; set; }
-    }
+    }   
 }
