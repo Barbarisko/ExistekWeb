@@ -4,8 +4,10 @@ using ExistekWEbProject.Extensions;
 using Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Ninject.Activation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,14 +37,8 @@ namespace ExistekWEbProject
         {
             //the extension method used here
             services.AddCustomServices();
-            var publishOptions = Configuration.GetSection("BasicFileConfig").Get<PublishOptions>();
+            services.AddSampleConfigs(Configuration);
 
-            Console.WriteLine("Basic author: " + publishOptions.Author);
-            Console.WriteLine("Basic filename: " + publishOptions.Filename);
-            Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
-            Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
-
-            services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -57,6 +54,9 @@ namespace ExistekWEbProject
             SetLogging(loggerFactory);
             //app.ConfigureExceptionHandler(defaultLogger);
 
+            
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -69,6 +69,7 @@ namespace ExistekWEbProject
             app.UseRouting();
 
             app.UseAuthorization();
+
             //custom middleware used here
             app.UsePublishMiddleware(options =>
             {
@@ -83,25 +84,52 @@ namespace ExistekWEbProject
 
         private void SetLogging(ILoggerFactory loggerFactory)
         {
-            //defining file for debug style logging
             var loggingOptions = Configuration.GetSection("FileLog:BasicFileLog").Get<LoggingOptions>();
+            var errorlogpath = Configuration.GetSection("FileLog:ErrorFileLog").Get<LoggingOptions>();
+            var warninglogpath = Configuration.GetSection("FileLog:WarningFileLog").Get<LoggingOptions>();
+            var infologpath = Configuration.GetSection("FileLog:InfoFileLog").Get<LoggingOptions>();
+
+            //defining file for debug style logging
             loggerFactory.AddFile(loggingOptions, new ColoredConsoleLoggerConfiguration
             {
                 LogLevel = LogLevel.Debug,
                 Color = ConsoleColor.Blue
             });
-            var defaultLogger = loggerFactory.CreateLogger("DefaultLogger");
-            defaultLogger.LogDebug("Processing request {0}", loggingOptions.FileName);
+            var defaultLogger = loggerFactory.CreateLogger("DebugLogger");
 
             //defining file for error style logging
-            var errorlogpath = Configuration.GetSection("FileLog:ErrorFileLog").Get<LoggingOptions>();
             loggerFactory.AddFile(errorlogpath, new ColoredConsoleLoggerConfiguration
             {
                 LogLevel = LogLevel.Error,
                 Color = ConsoleColor.Red
             });
             var errorLogger = loggerFactory.CreateLogger("ErrorLogger");
+            
+
+            //defining file for warning style logging
+            loggerFactory.AddFile(warninglogpath, new ColoredConsoleLoggerConfiguration
+            {
+                LogLevel = LogLevel.Warning,
+                Color = ConsoleColor.DarkYellow
+            });
+            var warningLogger = loggerFactory.CreateLogger("WarningLogger");
+           
+
+            //defining file for info style logging
+            loggerFactory.AddFile(infologpath, new ColoredConsoleLoggerConfiguration
+            {
+                LogLevel = LogLevel.Warning,
+                Color = ConsoleColor.Green
+            });
+            var infoLogger = loggerFactory.CreateLogger("InfoLogger");
+
+            //sample logging
+            defaultLogger.LogDebug("Processing request {0}", loggingOptions.FileName);
             errorLogger.LogError("Processing request {0}", errorlogpath.FileName);
+            warningLogger.LogWarning("Processing request {0}", warninglogpath.FileName);
+            infoLogger.LogInformation("Processing request {0}", infologpath.FileName);
         }
+
+       
     }
 }

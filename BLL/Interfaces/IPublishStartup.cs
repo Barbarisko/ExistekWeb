@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Interfaces
 {
     public interface IPublishStartup
     {
-        void Publish(string filepath);
-
+        void Publish(string filepath, uint required_volume);
+        IEnumerable<Article> ShowArticles(string directory);
     }
 }

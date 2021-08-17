@@ -20,7 +20,6 @@ namespace ExistekWEbProject.CustomLogger
             if (!Directory.Exists(_options.FolderPath))
             {
                 Directory.CreateDirectory(_options.FolderPath);
-                //File.Create(Options.FolderPath + newfile);
             }
             _config = config;
         }

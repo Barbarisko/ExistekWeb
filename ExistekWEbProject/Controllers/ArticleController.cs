@@ -1,4 +1,5 @@
-﻿using Interfaces;
+﻿using BLL;
+using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,20 +24,27 @@ namespace ExistekWEbProject.Controllers
             this.publishStartup = publishStartup;
         }
 
-        //[HttpGet]
-        //public IActionResult Publish(string filename)
-        //{
-        //    logger.LogInformation($"Fetching article from {filename}.txt");
+        [HttpGet]
+        [Route("[action]/{filename:}")]
+        public IActionResult Publish(string filename, uint required_volume)
+        {
+            logger.LogInformation($"Fetching article from {filename}.txt");
 
-        //    publishStartup.Publish(filename);
+            publishStartup.Publish(filename, required_volume);
 
-        //    throw new AccessViolationException($"Exception while fetching article from {filename}.txt.");
+            throw new AccessViolationException($"Exception while fetching article from {filename}.txt.");
 
-        //    logger.LogInformation($"Returning {filename}.");
+            logger.LogInformation($"Returning {filename}.");
 
-        //    return Ok(filename);
-        //}
+            return Ok(filename);
+        }
 
-
+        [HttpGet]
+        [Route("publish/[action]")]
+        public IEnumerable<Article> GetArticles(string directory)
+        {
+            var articles = publishStartup.ShowArticles(directory);
+            return articles.ToList();
+        }
     }
 }

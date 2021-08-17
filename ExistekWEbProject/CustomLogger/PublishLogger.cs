@@ -49,10 +49,15 @@ namespace ExistekWEbProject.CustomLogger
                 {
                     var color = Console.ForegroundColor;
                     Console.ForegroundColor = _config.Color;
-                    Console.WriteLine($"{logLevel.ToString()} - {eventId.Id} - {_name} - {formatter(state, exception)}");
+                    Console.WriteLine($"[{DateTime.Now}] {_name}[{eventId.Id}]\n \t {formatter(state, exception)}");
+                    //Console.WriteLine($"[{DateTime.UtcNow}]{logLevel.ToString()}- id {}-{_name}-{formatter(state, exception)}");
                     Console.ForegroundColor = color;
 
-                    File.AppendAllText(filePath, logLine);
+                    do
+                    {
+                        File.AppendAllText(filePath, logLine);
+                    }
+                    while ( Console.ForegroundColor == _config.Color);
                 }                
             }                
         }

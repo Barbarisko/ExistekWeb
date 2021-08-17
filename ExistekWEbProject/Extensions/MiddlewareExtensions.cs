@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,31 +24,7 @@ namespace ExistekWEbProject.Extensions
 
             return app.UseMiddleware<PublishMiddleware>(options);
         }
-        //public static IApplicationBuilder UseLoggerMiddleware(this IApplicationBuilder app, ILoggerFactory loggerFactory, IConfiguration Configuration)
-        //{
-        //    //var loggerFactory = LoggerFactory.Create(builder =>
-        //    //{
-        //    //    builder.AddProvider(new PublishLoggerProvider(loggingOptions));
-        //    //});
-        //    //var logger1 = loggerFactory.CreateLogger("Custom Logger");
-
-        //    var loggingOptions = Configuration.GetSection("FileLog:BasicFileLog").Get<LoggingOptions>();
-        //    var errorlogpath = Configuration.GetSection("FileLog:ExceptionFileLog").Get<LoggingOptions>(); 
-
-        //    loggerFactory.AddFile(loggingOptions);
-        //    var defaultLogger = loggerFactory.CreateLogger("DefaultLogger");
-        //    defaultLogger.LogInformation("Processing request {0}", loggingOptions.FileName);
-
-        //    loggerFactory.AddFile(errorlogpath);
-        //    var errorLogger = loggerFactory.CreateLogger("ExceptionLogger");
-        //    errorLogger.LogInformation("Processing request {0}", errorlogpath.FileName);
-
-        //    //app.ConfigureExceptionHandler(defaultLogger);
-
-        //    return app.UseMiddleware<PublishMiddleware>();
-        //}
-
-
+        
         public static void ConfigureExceptionHandler(this IApplicationBuilder app, ILogger logger)
         {
             app.UseExceptionHandler(appError =>
@@ -69,7 +46,26 @@ namespace ExistekWEbProject.Extensions
                 });
             });
         }
-        
+        public static void ConfigureCustomRoute(this IApplicationBuilder app, ILogger logger)
+        {
+            var routeHandler = new RouteHandler(async context =>
+            {
+                var routeDataValues = context.GetRouteData().Values;
+            });
+
+            var routeBuilder = new RouteBuilder(app, routeHandler);
+
+            routeBuilder.MapRoute("DefaultRoute",
+                "{controller:alpha:maxlength(7)}",
+                new { controller = "Home", action = "Index" }
+                );
+
+            routeBuilder.Routes.Add(new CustomRouter());
+
+            var router = routeBuilder.Build();
+
+            app.UseRouter(router);
+        }
     }
 
     public class ErrorDetails
@@ -81,4 +77,6 @@ namespace ExistekWEbProject.Extensions
             return JsonSerializer.Serialize(this);
         }
     }
+
+    
 }

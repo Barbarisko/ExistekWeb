@@ -1,4 +1,5 @@
 ﻿using Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,10 +20,11 @@ namespace BLL
         private IInfoService infoService;
         Dictionary<string, string> details;
         public Article article;
-
-        public ArticleService(IInfoService _infoService)
+        private ILogger<ArticleService> logger;
+        public ArticleService(IInfoService _infoService, ILogger<ArticleService> logger)
         {
             infoService = _infoService;
+            this.logger = logger;
         }
 
         public string GetText(string articleName)
@@ -40,10 +42,6 @@ namespace BLL
 
         public Article CreateArticle(string name, string author, string text)
         {
-            if (name == null || author == null)
-            {
-                throw new ArgumentNullException("no data to create");
-            }
 
             article = new Article { Name = name, Author = author, Text = new Info { Text = text} };
 
@@ -63,15 +61,17 @@ namespace BLL
 
             foreach (var p in properties)
             {
-                if((object)p.PropertyType is Info info)
+                logger.LogDebug(Convert.ToString(type.GetProperty(p.Name)));
+
+                if ((object)p.PropertyType is Info info)
                 {
                     infoService.AddInfo(GetText(Convert.ToString(type.GetProperty("Name"))));
-                }
+                    
+                }        
                 details.Add($"{p.PropertyType} {p.Name}", Convert.ToString(p.GetValue(p)));
-                Console.WriteLine($"{p.PropertyType} {p.Name}");
+                logger.LogDebug($"{p.PropertyType} {p.Name}");       
             }
-
-            Console.WriteLine("Detailes saved");
+            logger.LogDebug("Detailes saved");
         }
     }
 }

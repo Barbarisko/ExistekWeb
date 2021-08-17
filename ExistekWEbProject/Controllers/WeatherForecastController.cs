@@ -29,7 +29,8 @@ namespace ExistekWEbProject.Controllers
             publishStartup = _publishStartup;
         }
 
-        [HttpGet]
+       [HttpGet]
+
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();

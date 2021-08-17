@@ -31,12 +31,13 @@ namespace ExistekWEbProject
             }
 
             var requiredFilename = context.Request.Headers["filename"];
+            var requiredVolume = context.Request.Headers["required_volume"];
 
             if (requiredFilename == options.Filename)
             {
                 //logger.LogInformation($"Fetching article from {requiredFilename}.txt");
 
-                _publishStartup.Publish(requiredFilename);
+                _publishStartup.Publish(requiredFilename, Convert.ToUInt32(requiredVolume));
 
                 //throw new AccessViolationException($"Exception while fetching article from {requiredFilename}.txt.");
 
