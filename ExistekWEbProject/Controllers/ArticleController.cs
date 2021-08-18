@@ -41,7 +41,7 @@ namespace ExistekWEbProject.Controllers
 
         [HttpGet]
         [Route("publish/[action]")]
-        public IEnumerable<Article> GetArticles(string directory)
+        public IEnumerable<string> GetArticles(string directory)
         {
             var articles = publishStartup.ShowArticles(directory);
             return articles.ToList();

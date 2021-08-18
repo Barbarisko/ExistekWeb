@@ -10,6 +10,6 @@ namespace Interfaces
     public interface IPublishStartup
     {
         void Publish(string filepath, uint required_volume);
-        IEnumerable<Article> ShowArticles(string directory);
+        IEnumerable<string> ShowArticles(string directory);
     }
 }

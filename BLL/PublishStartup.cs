@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,17 +52,21 @@ namespace BLL
             }
         }
 
-        public IEnumerable<Article> ShowArticles(string directory)
+        public IEnumerable<string> ShowArticles(string directory)
         {
-            try
-            {
-                return articlePublishService.PublishArticle(
-                    articleService.CreateArticle(directory, "author", articleService.GetText(directory)));
-            }
-            catch
-            {
-                throw new NullReferenceException("no article to print");
-            }
+
+            //get this to configs
+            var path = "C:\\Users\\helen\\source\\repos\\ExistekWEbProject\\ExistekWEbProject\\Articles";
+            var ext = "*.txt";
+            if (directory != path)
+                //throw new NotExistingDirectoryException("This directory is invalid: ", directory);
+                Console.WriteLine("vcgfcgrxrx");
+
+            var a = Directory.GetFiles(path, ext)
+                                  .Select(Path.GetFileName);
+            foreach (var b in a) logger.LogWarning($"{b} \n");
+
+            return a;
         }
         private bool Checks(uint articlevolume)
         {

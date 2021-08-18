@@ -71,10 +71,10 @@ namespace ExistekWEbProject
             app.UseAuthorization();
 
             //custom middleware used here
-            app.UsePublishMiddleware(options =>
-            {
-                options.Filename = "article1";
-            });
+            //app.UsePublishMiddleware(options =>
+            //{
+            //    options.Filename = "article1";
+            //});
 
             app.UseEndpoints(endpoints =>
             {
