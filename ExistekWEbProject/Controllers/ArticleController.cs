@@ -25,26 +25,35 @@ namespace ExistekWEbProject.Controllers
         }
 
         [HttpGet]
-        [Route("[action]/{filename:}")]
+        [Route("[action]")]
+        //[Route("[action]/{filename:alpha:maxlength(7)}&&{required_volume:int}")]
         public IActionResult Publish(string filename, uint required_volume)
         {
-            logger.LogInformation($"Fetching article from {filename}.txt");
+            //logger.LogInformation($"Fetching article from {filename}.txt");
 
-            publishStartup.Publish(filename, required_volume);
+            if (publishStartup.Checks(required_volume))
+                publishStartup.Publish(filename);
+            else Console.WriteLine("pizdets");
 
-            throw new AccessViolationException($"Exception while fetching article from {filename}.txt.");
+            //throw new AccessViolationException($"Exception while fetching article from {filename}.txt.");
+            //logger.LogInformation($"Returning {filename}.");
 
-            logger.LogInformation($"Returning {filename}.");
-
-            return Ok(filename);
+            return Ok($"{ filename} successfully published");
         }
 
         [HttpGet]
-        [Route("publish/[action]")]
-        public IEnumerable<Article> GetArticles(string directory)
+        [Route("[action]/{directory:maxlength(200)}")]
+        public IEnumerable<string> GetArticles(string directory)
         {
-            var articles = publishStartup.ShowArticles(directory);
-            return articles.ToList();
+            try {
+                var articles = publishStartup.ShowArticles(directory);
+            return articles.ToList(); 
+            }
+            catch(NotExistingDirectoryException e)
+            {
+                logger.LogDebug(e.Message);
+                return new List<string>();
+            }
         }
     }
 }

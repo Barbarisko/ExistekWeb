@@ -13,12 +13,17 @@ namespace BLL
         private string text;
 
         public uint NumOfSigns { get { return numOfSigns; } 
-                                 set { numOfSigns = Convert.ToUInt32(Text.Trim().Count<char>()); } }
+                                 set { numOfSigns = value; } }
         public string? Text { get => text; set => text = value; }
 
         public Info()
         {
             Console.WriteLine($"num of signs in text = {numOfSigns }");
+        }
+
+        private void Set_numOfSigns(string? text)
+        {
+            numOfSigns = Convert.ToUInt32(text.Trim().Count<char>());
         }
 
     }

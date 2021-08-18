@@ -73,7 +73,7 @@ namespace ExistekWEbProject
             //custom middleware used here
             app.UsePublishMiddleware(options =>
             {
-                options.Filename = "article1";
+                options.Filename = "article";
             });
 
             app.UseEndpoints(endpoints =>
@@ -118,7 +118,7 @@ namespace ExistekWEbProject
             //defining file for info style logging
             loggerFactory.AddFile(infologpath, new ColoredConsoleLoggerConfiguration
             {
-                LogLevel = LogLevel.Warning,
+                LogLevel = LogLevel.Information,
                 Color = ConsoleColor.Green
             });
             var infoLogger = loggerFactory.CreateLogger("InfoLogger");

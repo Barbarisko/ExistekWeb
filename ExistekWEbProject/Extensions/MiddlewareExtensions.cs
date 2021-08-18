@@ -1,4 +1,5 @@
 ﻿using ExistekWEbProject.CustomLogger;
+using ExistekWEbProject.CustomRouting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -46,26 +47,26 @@ namespace ExistekWEbProject.Extensions
                 });
             });
         }
-        public static void ConfigureCustomRoute(this IApplicationBuilder app, ILogger logger)
-        {
-            var routeHandler = new RouteHandler(async context =>
-            {
-                var routeDataValues = context.GetRouteData().Values;
-            });
+        //public static void ConfigureCustomRoute(this IApplicationBuilder app, ILogger logger)
+        //{
+        //    var routeHandler = new RouteHandler(async context =>
+        //    {
+        //        var routeDataValues = context.GetRouteData().Values;
+        //    });
 
-            var routeBuilder = new RouteBuilder(app, routeHandler);
+        //    var routeBuilder = new RouteBuilder(app, routeHandler);
 
-            routeBuilder.MapRoute("DefaultRoute",
-                "{controller:alpha:maxlength(7)}",
-                new { controller = "Home", action = "Index" }
-                );
+        //    routeBuilder.MapRoute("DefaultRoute",
+        //        "{controller:alpha:maxlength(7)}",
+        //        new { controller = "Home", action = "Index" }
+        //        );
 
-            routeBuilder.Routes.Add(new CustomRouter());
+        //    routeBuilder.Routes.Add(new PublishRouter());
 
-            var router = routeBuilder.Build();
+        //    var router = routeBuilder.Build();
 
-            app.UseRouter(router);
-        }
+        //    app.UseRouter(router);
+        //}
     }
 
     public class ErrorDetails

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace BLL
             this.logger = logger;
         }
 
-        public void Publish(string filepath, uint required_volume)
+        public void Publish(string filepath)
         {
             try
             {
@@ -37,7 +38,7 @@ namespace BLL
 
                 foreach (var a in articles.ToList())
                 {
-                    if ((object)a is Article art && Checks(required_volume))
+                    if ((object)a is Article art)
                     {
                         
                         logger.LogInformation($"{art.Name} \n {art.Publishdate} \n {art.Author} \n {art.Text.Text}");
@@ -51,19 +52,22 @@ namespace BLL
             }
         }
 
-        public IEnumerable<Article> ShowArticles(string directory)
+        public IEnumerable<string> ShowArticles(string directory)
         {
-            try
-            {
-                return articlePublishService.PublishArticle(
-                    articleService.CreateArticle(directory, "author", articleService.GetText(directory)));
-            }
-            catch
-            {
-                throw new NullReferenceException("no article to print");
-            }
+
+            //get this to configs
+            var path = "C:\\Users\\helen\\source\\repos\\ExistekWEbProject\\ExistekWEbProject\\Articles";
+            var ext = "*.txt";
+            if (directory != path) 
+                throw new NotExistingDirectoryException("This directory is invalid: ", directory);
+
+            var a =  Directory.GetFiles(path, ext)
+                                  .Select(Path.GetFileName);
+           foreach(var b in a) logger.LogWarning($"{b} \n");
+
+            return a;
         }
-        private bool Checks(uint articlevolume)
+        public bool Checks(uint articlevolume)
         {
             if (!checkArticleService.HasHeading() || !checkArticleService.HasAuthor() 
                 || !checkArticleService.IsOfSetVolume(articlevolume)) return false;

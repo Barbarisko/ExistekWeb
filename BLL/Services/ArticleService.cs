@@ -18,9 +18,10 @@ namespace BLL
     public class ArticleService: IArticleService
     {
         private IInfoService infoService;
+        private ILogger<ArticleService> logger;
+
         Dictionary<string, string> details;
         public Article article;
-        private ILogger<ArticleService> logger;
         public ArticleService(IInfoService _infoService, ILogger<ArticleService> logger)
         {
             infoService = _infoService;
@@ -34,7 +35,6 @@ namespace BLL
             if (!File.Exists(path))
             {
                 File.Create(path);
-                throw new FileNotFoundException($"no file with name {articleName}");
             }
             var textForArticle = File.ReadAllText(path);
             return textForArticle;
@@ -44,7 +44,7 @@ namespace BLL
         {
 
             article = new Article { Name = name, Author = author, Text = new Info { Text = text} };
-
+            logger.LogDebug($"{article.Text.NumOfSigns}") ;
             return article;
         }
         
@@ -61,14 +61,11 @@ namespace BLL
 
             foreach (var p in properties)
             {
-                logger.LogDebug(Convert.ToString(type.GetProperty(p.Name)));
-
-                if ((object)p.PropertyType is Info info)
+                if ((object)p.PropertyType is IInfo info)
                 {
-                    infoService.AddInfo(GetText(Convert.ToString(type.GetProperty("Name"))));
-                    
+                    infoService.AddInfo(GetText(Convert.ToString(type.GetProperty("Name"))));                    
                 }        
-                details.Add($"{p.PropertyType} {p.Name}", Convert.ToString(p.GetValue(p)));
+                details.Add($"{p.PropertyType} {p.Name}", type.GetField(p.Name).GetValue(p).ToString());
                 logger.LogDebug($"{p.PropertyType} {p.Name}");       
             }
             logger.LogDebug("Detailes saved");

@@ -37,7 +37,7 @@ namespace ExistekWEbProject
             {
                 //logger.LogInformation($"Fetching article from {requiredFilename}.txt");
 
-                _publishStartup.Publish(requiredFilename, Convert.ToUInt32(requiredVolume));
+                _publishStartup.Publish(requiredFilename);
 
                 //throw new AccessViolationException($"Exception while fetching article from {requiredFilename}.txt.");
 
