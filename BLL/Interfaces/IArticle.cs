@@ -28,6 +28,6 @@ namespace Interfaces
     public interface IInfo
     {
         uint NumOfSigns { get; set; }
-        string? Text { get ; set ; }
+        string Text { get ; set ; }
     }
 }

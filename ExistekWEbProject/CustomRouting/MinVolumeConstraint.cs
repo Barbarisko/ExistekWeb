@@ -15,11 +15,11 @@ namespace ExistekWEbProject.CustomRouting
     
     //check for auth rights
     //and article volume
-    public class AuthorizationConstraint : IHttpRouteConstraint
+    public class MinVolumeConstraint : IHttpRouteConstraint
     {
         private readonly IArticle article;
 
-        public AuthorizationConstraint(IArticle article)
+        public MinVolumeConstraint(IArticle article)
         {
             this.article = article;
         }
@@ -47,6 +47,7 @@ namespace ExistekWEbProject.CustomRouting
             return false;
         }
 
+        //todo
         private bool AuthCheck() {
             return false;
         }

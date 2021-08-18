@@ -1,5 +1,6 @@
 ﻿using BLL;
 using ExistekWEbProject.CustomLogger;
+using ExistekWEbProject.CustomRouting;
 using Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
@@ -36,13 +37,14 @@ namespace ExistekWEbProject
             Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
 
             services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));
-        }     
-        //public static void AddCustomRouting(this IServiceCollection services)
-        //{
-        //    services.Configure<RouteOptions>(_ =>
-        //    {
-        //        _.ConstraintMap.Add("cust", typeof(CustomRouteConstrain));
-        //    });
-        //}       
+        }
+        public static void AddCustomRouting(this IServiceCollection services)
+        {
+            services.Configure<RouteOptions>(_ =>
+            {
+                _.ConstraintMap.Add("minvolume", typeof(MinVolumeConstraint));
+                _.ConstraintMap.Add("req_dir", typeof(DirectoryConstraint));
+            });
+        }
     }
 }

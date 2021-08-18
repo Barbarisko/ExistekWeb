@@ -17,27 +17,32 @@ namespace BLL
 
         public bool HasHeading()
         {
-            if (article.Name == null)
-            {
-                return false;
-            }
+
+            if (article == null) return false; 
+            //if (article.Name == null)
+            //{
+            //    return false;
+            //}
             return true;
         }
 
         public bool HasAuthor()
         {
-            if (article.Author == null)
-            {
-                return false;
-            }
+            if (article == null) return false;
+
+            //if (article.Author == null)
+            //{
+            //    return false;
+            //}
             return true;
         }
         public bool HasText()
         {
+            if (article == null) return false;
+
             if (article.Text.NumOfSigns == 0)
             {
                 return false;
-                //throw new ArgumentNullException("empty article");
             }
             return true;
         }
@@ -48,13 +53,11 @@ namespace BLL
                 if (article.Text.NumOfSigns > volume)
                 {
                     return false;
-                    throw new ArgumentException("big article");
                 }
-                else if (article.Text.NumOfSigns < volume)
-                {
-                    return false;
-                    throw new ArgumentException("small article");
-                }
+                //if (article.Text.NumOfSigns < volume)
+                //{
+                //    return false;
+                //}
                 return true;
             }
             return false;

@@ -38,7 +38,7 @@ namespace ExistekWEbProject
             //the extension method used here
             services.AddCustomServices();
             services.AddSampleConfigs(Configuration);
-
+            services.AddCustomRouting();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -54,8 +54,8 @@ namespace ExistekWEbProject
             SetLogging(loggerFactory);
             //app.ConfigureExceptionHandler(defaultLogger);
 
-            
-
+            //custom route for ArticleController 
+            //app.ConfigurePublishRoute();
 
             if (env.IsDevelopment())
             {
@@ -71,10 +71,10 @@ namespace ExistekWEbProject
             app.UseAuthorization();
 
             //custom middleware used here
-            app.UsePublishMiddleware(options =>
-            {
-                options.Filename = "article";
-            });
+            //app.UsePublishMiddleware(options =>
+            //{
+            //    options.Filename = "article";
+            //});
 
             app.UseEndpoints(endpoints =>
             {

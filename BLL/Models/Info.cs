@@ -9,15 +9,18 @@ namespace BLL
 {
     public class Info:IInfo
     {
-        private uint numOfSigns;
+        private uint numOfSigns = 0;
         private string text;
 
         public uint NumOfSigns { get { return numOfSigns; } 
                                  set { numOfSigns = value; } }
-        public string? Text { get => text; set => text = value; }
+        public string Text { get => text; set => text = value; }
 
-        public Info()
+        public Info() { }
+        public Info(string text)
         {
+            Text = text;
+            Set_numOfSigns(text);
             Console.WriteLine($"num of signs in text = {numOfSigns }");
         }
 

@@ -16,21 +16,21 @@ namespace BLL
     public class AriclePublishService : IArticlePublishService
     {
         private readonly IArticleService articleService;
-        IEnumerable<Article> articles;
+        List<Article> articles;
         public AriclePublishService(IArticleService _articleService)
         {
             articleService = _articleService;
+            articles = new List<Article>();
         }
 
-        
+
 
         //"publishes" to list of articles
         public IEnumerable<Article> PublishArticle(Article obj)
         {
-            articleService.SaveArticleInfo(obj.GetType());
+            articleService.SaveArticleInfo(obj.GetType(), obj);
 
-            articles = new List<Article>();
-            articles.ToList().Add(obj);
+            articles.Add(obj);
             //articles.ToList().Add(obj.GetType());
             return articles;
         }

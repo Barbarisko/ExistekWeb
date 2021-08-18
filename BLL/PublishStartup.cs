@@ -31,20 +31,16 @@ namespace BLL
             {
                 //тут я запуталась с кастами к типам, короче оно не работaeт, и мозг уже тоже не работает
 
-                var articles = articlePublishService.PublishArticle(
-                    articleService.CreateArticle(filepath, "author", articleService.GetText(filepath)));
-
-                articles.ToList().Add(new Article());
+                List<Article> articles = articlePublishService.PublishArticle(
+                    articleService.CreateArticle(filepath, "author", articleService.GetText(filepath))).ToList();
 
                 foreach (var a in articles.ToList())
                 {
                     if ((object)a is Article art)
-                    {
-                        
+                    {                        
                         logger.LogInformation($"{art.Name} \n {art.Publishdate} \n {art.Author} \n {art.Text.Text}");
                     }
                 }
-
             }
             catch (Exception e)
             {

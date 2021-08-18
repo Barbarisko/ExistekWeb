@@ -35,7 +35,9 @@ namespace BLL
             if (!File.Exists(path))
             {
                 File.Create(path);
+                
             }
+
             var textForArticle = File.ReadAllText(path);
             return textForArticle;
         }
@@ -43,12 +45,16 @@ namespace BLL
         public Article CreateArticle(string name, string author, string text)
         {
 
-            article = new Article { Name = name, Author = author, Text = new Info { Text = text} };
+            article = new Article { 
+                Name = name, 
+                Author = author, 
+                Text = new Info(text) 
+            };
             logger.LogDebug($"{article.Text.NumOfSigns}") ;
             return article;
         }
         
-        public void SaveArticleInfo(Type type)
+        public void SaveArticleInfo(Type type, object obj)
         {
             details = new Dictionary<string, string>();
 
@@ -65,7 +71,7 @@ namespace BLL
                 {
                     infoService.AddInfo(GetText(Convert.ToString(type.GetProperty("Name"))));                    
                 }        
-                details.Add($"{p.PropertyType} {p.Name}", type.GetField(p.Name).GetValue(p).ToString());
+                details.Add($"{p.PropertyType} {p.Name}", Convert.ToString(p.GetValue(obj)));
                 logger.LogDebug($"{p.PropertyType} {p.Name}");       
             }
             logger.LogDebug("Detailes saved");
