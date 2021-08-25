@@ -1,4 +1,5 @@
 using BLL;
+using DataAccess;
 using ExistekWEbProject.CustomLogger;
 using ExistekWEbProject.Extensions;
 using Interfaces;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,16 +27,22 @@ namespace ExistekWEbProject
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //adding db context
+            services.AddDbContext<PublishContext>(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("localhost"));
+            });
+
             //the extension method used here
             services.AddCustomServices();
             services.AddSampleConfigs(Configuration);
@@ -84,13 +92,13 @@ namespace ExistekWEbProject
 
         private void SetLogging(ILoggerFactory loggerFactory)
         {
-            var loggingOptions = Configuration.GetSection("FileLog:BasicFileLog").Get<LoggingOptions>();
+            var debuglogpath = Configuration.GetSection("FileLog:DebugFileLog").Get<LoggingOptions>();
             var errorlogpath = Configuration.GetSection("FileLog:ErrorFileLog").Get<LoggingOptions>();
             var warninglogpath = Configuration.GetSection("FileLog:WarningFileLog").Get<LoggingOptions>();
             var infologpath = Configuration.GetSection("FileLog:InfoFileLog").Get<LoggingOptions>();
 
             //defining file for debug style logging
-            loggerFactory.AddFile(loggingOptions, new ColoredConsoleLoggerConfiguration
+            loggerFactory.AddFile(debuglogpath, new ColoredConsoleLoggerConfiguration
             {
                 LogLevel = LogLevel.Debug,
                 Color = ConsoleColor.Blue
@@ -124,12 +132,10 @@ namespace ExistekWEbProject
             var infoLogger = loggerFactory.CreateLogger("InfoLogger");
 
             //sample logging
-            defaultLogger.LogDebug("Processing request {0}", loggingOptions.FileName);
+            defaultLogger.LogDebug("Processing request {0}", debuglogpath.FileName);
             errorLogger.LogError("Processing request {0}", errorlogpath.FileName);
             warningLogger.LogWarning("Processing request {0}", warninglogpath.FileName);
             infoLogger.LogInformation("Processing request {0}", infologpath.FileName);
-        }
-
-       
+        }       
     }
 }

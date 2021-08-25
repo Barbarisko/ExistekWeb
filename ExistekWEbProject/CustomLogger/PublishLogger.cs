@@ -43,13 +43,13 @@ namespace ExistekWEbProject.CustomLogger
             {
                 var filePath = Path.Combine(_provider._options.FolderPath, _provider._options.FileName);
 
-                var logLine = formatter(state, exception) + Environment.NewLine;
+                var logLine = $"[{DateTime.Now.ToString()}]"+formatter(state, exception) + Environment.NewLine;
 
                 lock (_lock)
                 {
                     var color = Console.ForegroundColor;
                     Console.ForegroundColor = _config.Color;
-                    Console.WriteLine($"[{DateTime.Now}] {_name}[{eventId.Id}]\n \t {formatter(state, exception)}");
+                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {_name}[{eventId.Id}]\n \t {formatter(state, exception)}");
                     //Console.WriteLine($"[{DateTime.UtcNow}]{logLevel.ToString()}- id {}-{_name}-{formatter(state, exception)}");
                     Console.ForegroundColor = color;
 
