@@ -11,17 +11,15 @@ namespace DataAccess.UnitOfWork
 	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly PublishContext _context;
-		public IRepository<Article> AddressRepository { get; }
 		public IRepository<Article> ArticleRepository { get; }
 		public IRepository<Author> AuthorRepository { get; }
 		public IRepository<Tag> TagRepository { get; }
 		public IRepository<Text> TextRepository { get; }
 		public IRepository<ArticleTag> ArticleTagRepository { get; }
 
-        public UnitOfWork(PublishContext context, IRepository<Article> addressRepository, IRepository<Article> articleRepository, IRepository<Author> authorRepository, IRepository<Tag> tagRepository, IRepository<Text> textRepository, IRepository<ArticleTag> articleTagRepository)
+        public UnitOfWork(PublishContext context, IRepository<Article> articleRepository, IRepository<Author> authorRepository, IRepository<Tag> tagRepository, IRepository<Text> textRepository, IRepository<ArticleTag> articleTagRepository)
         {
             _context = context;
-            AddressRepository = addressRepository;
             ArticleRepository = articleRepository;
             AuthorRepository = authorRepository;
             TagRepository = tagRepository;

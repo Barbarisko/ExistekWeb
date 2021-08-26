@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace DataAccess.Entities
+namespace BLL.ModelsNew
 {
-    public partial class Text
+    public partial class TextModel
     {
         public int IdArticle { get; set; }
         public int? ReaderRating { get; set; }
         public bool? AdultOnly { get; set; }
         public string Data { get; set; }
 
-        public Article Article { get; set; }
+        public ArticleModel Article { get; set; }
     }
 }

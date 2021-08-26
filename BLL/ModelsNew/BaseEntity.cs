@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Entities
+namespace BLL.ModelsNew
 {
 	public abstract class BaseEntity : IBaseEntity
 	{

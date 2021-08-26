@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace DataAccess.Entities
+namespace BLL.ModelsNew
 {
-    public partial class ArticleTag : BaseEntity
+    public partial class ArticleTagModel : BaseEntity
     {
         public int? IdArticle { get; set; }
         public int? IdTag { get; set; }
 
-        public Article Article { get; set; }
-        public Tag Tag { get; set; }
+        public ArticleModel Article { get; set; }
+        public TagModel Tag { get; set; }
     }
 }

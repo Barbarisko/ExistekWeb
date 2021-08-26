@@ -1,4 +1,8 @@
-﻿using Interfaces;
+﻿using AutoMapper;
+using BLL.ModelsNew;
+using DataAccess.Entities;
+using DataAccess.UnitOfWork;
+using Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,13 +23,17 @@ namespace BLL
     {
         private IInfoService infoService;
         private ILogger<ArticleService> logger;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
         Dictionary<string, string> details;
         public Article article;
-        public ArticleService(IInfoService _infoService, ILogger<ArticleService> logger)
+        public ArticleModel articleModel;
+        public ArticleService(IInfoService _infoService, ILogger<ArticleService> logger, IUnitOfWork unitOfWork)
         {
             infoService = _infoService;
             this.logger = logger;
+            this.unitOfWork = unitOfWork;
         }
 
         public string GetText(string articleName)
@@ -44,14 +52,29 @@ namespace BLL
 
         public Article CreateArticle(string name, string author, string text)
         {
-
             article = new Article { 
                 Name = name, 
                 Author = author, 
                 Text = new Info(text) 
             };
+
             logger.LogDebug($"{article.Text.NumOfSigns}") ;
             return article;
+        }
+
+        //method with use of UoF
+        public int AddArticleToDB(string name, int authorID, List<ArticleTagModel> tags)
+        {
+            articleModel = new ArticleModel { 
+                IdAuthor = authorID,
+                Name = name, 
+                ArticleTags = tags
+            };
+
+            unitOfWork.ArticleRepository.Add(mapper.Map<DataAccess.Entities.Article>(articleModel));
+            unitOfWork.Save();
+
+            return articleModel.Id;
         }
         
         public void SaveArticleInfo(Type type, object obj)

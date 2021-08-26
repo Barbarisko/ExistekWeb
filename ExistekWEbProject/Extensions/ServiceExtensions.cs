@@ -1,4 +1,6 @@
-﻿using BLL;
+﻿using AutoMapper;
+using BLL;
+using DataAccess.UnitOfWork;
 using ExistekWEbProject.CustomLogger;
 using ExistekWEbProject.CustomRouting;
 using Interfaces;
@@ -20,6 +22,9 @@ namespace ExistekWEbProject
         {
             services.AddScoped<IInfo, Info>();
             services.AddScoped<IArticle, Article>();
+            
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton(new MapperConfiguration(c => c.AddProfile(new BusinessLogic.CustomMapper())).CreateMapper());
 
             services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<IArticlePublishService, AriclePublishService>();

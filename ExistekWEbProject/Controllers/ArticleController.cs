@@ -1,8 +1,10 @@
 ﻿using BLL;
+using BLL.ModelsNew;
 using ExistekWEbProject.CustomFilters;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +18,7 @@ namespace ExistekWEbProject.Controllers
     public class ArticleController : Controller
     {
         private readonly IPublishStartup publishStartup;
+        private readonly IArticleService articleService;
 
         private readonly ILogger<ArticleController> logger;
 
@@ -73,5 +76,20 @@ namespace ExistekWEbProject.Controllers
                 return new List<string>();
             }
         }
+
+        //implementing services
+        [HttpPost]
+        public ActionResult CreateArticle()
+        {
+            var id = articleService.AddArticleToDB("test", 1, new List<ArticleTagModel>() { new ArticleTagModel() { IdArticle=1, IdTag = 2} });
+            return Json(new { ArticleId =  id});
+        }
+
+        public class CreateArticleRequest
+        {
+            [JsonProperty("articleId")]
+            public int ArticleId { get; set; }
+        }
+
     }
 }
