@@ -10,6 +10,8 @@ namespace DataAccess
 {
     public partial class PublishContext : DbContext
     {
+        public virtual DbSet<ArticleOld> OldArticle { get; set; }
+        public virtual DbSet<InfoOld> OldInfo { get; set; }
         public virtual DbSet<Article> Articles { get; set; }
         public virtual DbSet<ArticleTag> ArticleTags { get; set; }
         public virtual DbSet<Author> Authors { get; set; }

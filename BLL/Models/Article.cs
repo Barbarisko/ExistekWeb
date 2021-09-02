@@ -1,6 +1,7 @@
 ﻿using Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace BLL
         private IInfo text; 
         public int Id { get => id; set => id = value; }
         public IInfo Text { get => text; set => text = value; }
+
+        [Required(ErrorMessage = "Value is Must")]
         public string Name { get => name; set => name = value; }
         public string Author { get => author; set => author = value; }
         public DateTime Publishdate { get => publishdate;}

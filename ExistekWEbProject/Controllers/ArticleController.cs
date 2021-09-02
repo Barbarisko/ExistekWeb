@@ -1,5 +1,6 @@
 ﻿using BLL;
 using BLL.ModelsNew;
+using DataAccess;
 using ExistekWEbProject.CustomFilters;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -14,18 +15,21 @@ using System.Threading.Tasks;
 namespace ExistekWEbProject.Controllers
 {
     [ApiController]
-    [Route("publish")]
+    [Microsoft.AspNetCore.Mvc.Route("publish")]
     public class ArticleController : Controller
     {
         private readonly IPublishStartup publishStartup;
         private readonly IArticleService articleService;
 
+        private PublishContext publishContext;
         private readonly ILogger<ArticleController> logger;
 
-        public ArticleController(ILogger<ArticleController> _logger, IPublishStartup publishStartup)
+        public ArticleController(ILogger<ArticleController> _logger, IPublishStartup publishStartup, 
+            PublishContext publishContext)
         {
             logger = _logger;
             this.publishStartup = publishStartup;
+            this.publishContext = publishContext;
         }
 
         [HttpGet]    
@@ -48,16 +52,13 @@ namespace ExistekWEbProject.Controllers
             {
                 logger.LogError(e.Message);
                 return NotFound($"{ filename} not found");
-
             }
-
         }
         
        
         [HttpGet]
         [TypeFilter(typeof(DirectoryExceptionFilter))]
         [Route("[action]")]
-
         public List<string> GetArticles(string directory, int numOfArticles)
         {
             try
@@ -85,10 +86,18 @@ namespace ExistekWEbProject.Controllers
             return Json(new { ArticleId =  id});
         }
 
-        public class CreateArticleRequest
+        [HttpGet]
+        [Route("[action]")]
+        [System.Web.Http.Description.ResponseType(typeof(Article))]
+        public System.Web.Http.IHttpActionResult Get(int id)
         {
-            [JsonProperty("articleId")]
-            public int ArticleId { get; set; }
+            var emp = publishContext.OldArticle.Find(id);
+
+            if (emp == null)
+            {
+                throw new NotExistingDirectoryException("Record Not Found, It may be removed");
+            }
+            return (System.Web.Http.IHttpActionResult)Ok(emp);
         }
 
     }

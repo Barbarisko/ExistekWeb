@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BLL;
+using DataAccess.Entities;
+using DataAccess.Repository;
 using DataAccess.UnitOfWork;
 using ExistekWEbProject.CustomLogger;
 using ExistekWEbProject.CustomRouting;
@@ -21,8 +23,14 @@ namespace ExistekWEbProject
         public static void AddCustomServices(this IServiceCollection services)
         {
             services.AddScoped<IInfo, Info>();
-            services.AddScoped<IArticle, Article>();
-            
+            services.AddScoped<IArticle, BLL.Article>();
+
+            services.AddScoped<IRepository<ArticleTag>, Repository<ArticleTag>>();
+            services.AddScoped<IRepository<Author>, Repository<Author>>();
+            services.AddScoped<IRepository<Tag>, Repository<Tag>>();
+            services.AddScoped<IRepository<Text>, Repository<Text>>();
+            services.AddScoped<IRepository<DataAccess.Entities.Article>, Repository<DataAccess.Entities.Article>>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddSingleton(new MapperConfiguration(c => c.AddProfile(new BusinessLogic.CustomMapper())).CreateMapper());
 

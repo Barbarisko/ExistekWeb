@@ -11,5 +11,28 @@ namespace ExistekWEbProject.CustomFilters
     //Ключі для куків і для хедера потрібно взяти з конфігурації.
     public class ValidParamsFilter
     {
+        //public override void OnActionExecuting(ActionExecutingContext context)
+        //{
+        //    string message = $"\n {context.ActionDescriptor.DisplayName} -> " +
+        //                    $"{context.Controller} -> " +
+        //                    $"{this.GetType().GetMethod("OnActionExecuting").Name}\t- {DateTime.Now} ";
+        //    logger.LogInformation(message);
+        //}
+
+        //public override void OnActionExecuted(ActionExecutedContext context)
+        //{
+        //    string message = $"\n {context.ActionDescriptor.DisplayName} -> " +
+        //                               $"{context.Controller} -> " +
+        //                               $"{this.GetType().GetMethod("OnActionExecuted").Name}\t- {DateTime.Now} ";
+        //    logger.LogInformation(message);
+        //}
+
+        //public override void OnResultExecuting(ResultExecutingContext context)
+        //{
+        //    string message = $"\n {context.RouteData.Values["controller"]} -> " +
+        //                    $"{context.RouteData.Values["action"]} -> " +
+        //                    $"{this.GetType().GetMethod("OnResultExecuting").Name}\t- {DateTime.Now} ";
+        //    logger.LogInformation(message);
+        //}
     }
 }

@@ -6,6 +6,6 @@ namespace Interfaces
 {
     public interface IArticlePublishService
     {
-        IEnumerable<Article> PublishArticle(Article obj);
+        IEnumerable<Article> PublishArticle(object obj);
     }
 }
