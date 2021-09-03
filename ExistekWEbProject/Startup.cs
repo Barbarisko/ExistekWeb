@@ -42,7 +42,7 @@ namespace ExistekWEbProject
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("localhost"));
             });
-
+            
             //the extension method used here
             services.AddCustomServices();
             services.AddSampleConfigs(Configuration);
@@ -70,6 +70,10 @@ namespace ExistekWEbProject
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExistekWEbProject v1"));
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
             }
 
             app.UseHttpsRedirection();

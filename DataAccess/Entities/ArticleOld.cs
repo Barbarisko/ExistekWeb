@@ -30,6 +30,7 @@ namespace DataAccess.Entities
     {
         private uint numOfSigns = 0;
         private string text;
+        public int Id { get ; set ; }
 
         public uint NumOfSigns
         {

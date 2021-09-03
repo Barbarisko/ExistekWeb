@@ -3,18 +3,14 @@ using BLL;
 using DataAccess.Entities;
 using DataAccess.Repository;
 using DataAccess.UnitOfWork;
-using ExistekWEbProject.CustomLogger;
+using ExistekWEbProject.CustomFilters;
 using ExistekWEbProject.CustomRouting;
 using Interfaces;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace ExistekWEbProject
 {
@@ -22,6 +18,8 @@ namespace ExistekWEbProject
     {
         public static void AddCustomServices(this IServiceCollection services)
         {
+            services.AddScoped<DirectoryExceptionFilter>();
+
             services.AddScoped<IInfo, Info>();
             services.AddScoped<IArticle, BLL.Article>();
 
@@ -42,12 +40,12 @@ namespace ExistekWEbProject
         }
         public static void AddSampleConfigs(this IServiceCollection services, IConfiguration Configuration)
         {
-            var publishOptions = Configuration.GetSection("BasicFileConfig").Get<PublishOptions>();
+            //var publishOptions = Configuration.GetSection("BasicFileConfig").Get<PublishOptions>();
 
-            Console.WriteLine("Basic author: " + publishOptions.Author);
-            Console.WriteLine("Basic filename: " + publishOptions.Filename);
-            Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
-            Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
+            //Console.WriteLine("Basic author: " + publishOptions.Author);
+            //Console.WriteLine("Basic filename: " + publishOptions.Filename);
+            //Console.WriteLine("basic publishdate: " + publishOptions.PublishDate);
+            //Console.WriteLine("default text: " + publishOptions.InfoConfig.TestText);
 
             services.Configure<PublishOptions>(Configuration.GetSection("BasicFileConfig"));
         }
@@ -55,7 +53,6 @@ namespace ExistekWEbProject
         {
             services.Configure<RouteOptions>(_ =>
             {
-                _.ConstraintMap.Add("minvolume", typeof(MinVolumeConstraint));
                 _.ConstraintMap.Add("req_dir", typeof(DirectoryConstraint));
             });
         }

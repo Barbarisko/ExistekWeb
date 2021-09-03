@@ -10,12 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ExistekWEbProject.Controllers
 {
     [ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("publish")]
+    [Route("publish")]
     public class ArticleController : Controller
     {
         private readonly IPublishStartup publishStartup;
@@ -24,12 +25,13 @@ namespace ExistekWEbProject.Controllers
         private PublishContext publishContext;
         private readonly ILogger<ArticleController> logger;
 
-        public ArticleController(ILogger<ArticleController> _logger, IPublishStartup publishStartup, 
-            PublishContext publishContext)
+        public ArticleController(ILogger<ArticleController> _logger, IPublishStartup publishStartup,
+            PublishContext publishContext, IArticleService articleService)
         {
             logger = _logger;
             this.publishStartup = publishStartup;
             this.publishContext = publishContext;
+            this.articleService = articleService;
         }
 
         [HttpGet]    
@@ -54,27 +56,26 @@ namespace ExistekWEbProject.Controllers
                 return NotFound($"{ filename} not found");
             }
         }
-        
-       
+
+
         [HttpGet]
-        [TypeFilter(typeof(DirectoryExceptionFilter))]
         [Route("[action]")]
+        [ServiceFilter(typeof(DirectoryExceptionFilter))]
         public List<string> GetArticles(string directory, int numOfArticles)
         {
-            try
+            var articles = publishStartup.ShowArticles(directory);
+            var new_list = new List<string>();
+
+            if (numOfArticles > articles.Count())
+                return articles.ToList();
+
+            else
             {
-                var articles = publishStartup.ShowArticles(directory);
-                var new_list = new List<string>();
-                for (int i = 0; i<=numOfArticles; i++)
+                for (int i = 0; i <= numOfArticles; i++)
                 {
                     new_list.Add(articles.ToList()[i]);
                 }
                 return new_list;
-            }
-            catch (NotExistingDirectoryException e)
-            {
-                logger.LogDebug(e.Message);
-                return new List<string>();
             }
         }
 
@@ -82,22 +83,11 @@ namespace ExistekWEbProject.Controllers
         [HttpPost]
         public ActionResult CreateArticle()
         {
-            var id = articleService.AddArticleToDB("test", 1, new List<ArticleTagModel>() { new ArticleTagModel() { IdArticle=1, IdTag = 2} });
+            var id = articleService.AddArticleToDB("test", 1, 
+                new List<ArticleTagModel>() {
+                    new ArticleTagModel() { IdArticle=1, IdTag = 2} 
+                });
             return Json(new { ArticleId =  id});
-        }
-
-        [HttpGet]
-        [Route("[action]")]
-        [System.Web.Http.Description.ResponseType(typeof(Article))]
-        public System.Web.Http.IHttpActionResult Get(int id)
-        {
-            var emp = publishContext.OldArticle.Find(id);
-
-            if (emp == null)
-            {
-                throw new NotExistingDirectoryException("Record Not Found, It may be removed");
-            }
-            return (System.Web.Http.IHttpActionResult)Ok(emp);
         }
 
     }
