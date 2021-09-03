@@ -1,4 +1,5 @@
 ﻿using BLL;
+using ExistekWEbProject.CustomFilters;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -37,6 +38,14 @@ namespace ExistekWEbProject.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [ServiceFilter(typeof(ValidParamsFilter))]
+        [HttpPost]
+        public int[] CompareResult([FromHeader] int result)
+        {
+
+            return new int[] { };
         }
 
     }

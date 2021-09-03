@@ -1,4 +1,5 @@
 ﻿using BLL.ModelsNew;
+using BusinessLogic.CustomValidation;
 using DataAccess;
 using DataAccess.Entities;
 using ExistekWEbProject.CustomFilters;
@@ -64,6 +65,7 @@ namespace ExistekWEbProject.Controllers
         [HttpGet]
         [Route("[action]")]
         [ServiceFilter(typeof(DirectoryExceptionFilter))]
+        [IsNotNull]
         public List<string> GetArticles([FromHeader] string directory, int numOfArticles)
         {
             var articles = publishStartup.ShowArticles(directory);
