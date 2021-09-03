@@ -20,13 +20,9 @@ namespace ExistekWEbProject.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        private readonly IPublishStartup publishStartup;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger,
-             IPublishStartup _publishStartup)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
-            publishStartup = _publishStartup;
         }
 
        [HttpGet]

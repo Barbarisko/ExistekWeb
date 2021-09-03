@@ -11,6 +11,6 @@ namespace Interfaces
         void SaveArticleInfo(Type type, object obj);
         string GetText(string articleName);
         Article CreateArticle(string name, string author, string text);
-        int AddArticleToDB(string name, int authorID, List<ArticleTagModel> tags);
+        ArticleModel AddArticleToDB(string name, int authorID, List<ArticleTagModel> tags);
     }
 }

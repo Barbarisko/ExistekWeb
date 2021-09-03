@@ -29,11 +29,12 @@ namespace BLL
         Dictionary<string, string> details;
         public Article article;
         public ArticleModel articleModel;
-        public ArticleService(IInfoService _infoService, ILogger<ArticleService> logger, IUnitOfWork unitOfWork)
+        public ArticleService(IInfoService _infoService, ILogger<ArticleService> logger, IUnitOfWork unitOfWork, IMapper mapper)
         {
             infoService = _infoService;
             this.logger = logger;
             this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
         public string GetText(string articleName)
@@ -63,18 +64,18 @@ namespace BLL
         }
 
         //method with use of UoF
-        public int AddArticleToDB(string name, int authorID, List<ArticleTagModel> tags)
+        public ArticleModel AddArticleToDB(string name, int authorID, List<ArticleTagModel> tags)
         {
-            articleModel = new ArticleModel { 
+            articleModel = new ArticleModel
+            {
                 IdAuthor = authorID,
-                Name = name, 
+                Name = name,
                 ArticleTags = tags
             };
-
             unitOfWork.ArticleRepository.Add(mapper.Map<DataAccess.Entities.Article>(articleModel));
             unitOfWork.Save();
 
-            return articleModel.Id;
+            return articleModel;
         }
         
         public void SaveArticleInfo(Type type, object obj)

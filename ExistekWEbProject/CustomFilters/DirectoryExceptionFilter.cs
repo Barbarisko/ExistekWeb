@@ -27,20 +27,19 @@ namespace ExistekWEbProject.CustomFilters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            var res = context.Exception.Message;
-
-            logger.LogError(res, "happening");
-
-            if (context.Exception is NotExistingDirectoryException exception)
+            if (context.Exception != null)
             {
-                context.Result = new ObjectResult(exception.Message)
+                if (context.Exception is NotExistingDirectoryException exception)
                 {
-                    StatusCode = (int?)HttpStatusCode.NotFound,
-                };
-                context.ExceptionHandled = true;
+                    context.Result = new ObjectResult(exception.Message)
+                    {
+                        StatusCode = (int?)HttpStatusCode.NotFound,
+                    };
+                    context.ExceptionHandled = true;
 
-                logger.LogError($"Exception '{res}' handled");
+                    logger.LogError($"Exception '{context.Exception.Message}' handled");
 
+                }
             }
         }
         
