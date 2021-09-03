@@ -42,7 +42,7 @@ namespace ExistekWEbProject.CustomFilters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!context.ModelState.IsValid)
+            if (context.ModelState.IsValid)
             {
                 var cookie1 = context.HttpContext.Request.Cookies[configuration.GetValue<string>("KeysForRequest:Prop1")];
                 Prop1 = Convert.ToInt32(cookie1);
@@ -54,11 +54,18 @@ namespace ExistekWEbProject.CustomFilters
                 Result = Convert.ToInt32(header_result);
 
                 Logger.LogWarning($"Got params to validate : {Prop11} {Prop21}");
-                if (this.Prop1 > this.Prop2)
+                if ((this.Prop1+ this.Prop2)==Result)
                 {
                     context.Result = new ObjectResult(context.HttpContext.Response.Body)
                     {
                         StatusCode = (int?)HttpStatusCode.OK,
+                    };
+                }
+                else
+                {
+                    context.Result = new ObjectResult(context.HttpContext.Response.Body)
+                    {
+                        StatusCode = (int?)HttpStatusCode.BadRequest,
                     };
                 }
             }
@@ -67,7 +74,7 @@ namespace ExistekWEbProject.CustomFilters
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
 
-            if (this.Prop1 > this.Prop2)
+            if (this.Prop1 < this.Prop2)
             {
                 yield return new ValidationResult("Prop1 must be larger than Prop2");
             }

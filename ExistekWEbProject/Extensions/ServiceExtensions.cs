@@ -19,6 +19,8 @@ namespace ExistekWEbProject
         public static void AddCustomServices(this IServiceCollection services)
         {
             services.AddScoped<DirectoryExceptionFilter>();
+            services.AddScoped<ValidParamsFilter>();
+
 
             services.AddScoped<IInfo, Info>();
             services.AddScoped<IArticle, BLL.Article>();
